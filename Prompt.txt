@@ -1,0 +1,20 @@
+Plan and build a genuinely small language model from scratch, train it in JupyterLab, and connect it to a simple Streamlit assistant.
+
+“From scratch” means the model weights must be initialized randomly and trained by us. Do not download, call, or fine-tune any pretrained language model. Using real libraries such as PyTorch and a real tokenizer package is allowed. Do not invent APIs, packages, model weights, or training results.
+
+Before changing files, inspect the project and the available hardware: Python version, RAM, GPU and GPU memory, and free disk space. Recommend a realistic model size for this computer before starting training. Do not promise a capable general assistant if the hardware and data cannot produce one. Make a small educational model the fallback.
+
+Use a Jupyter notebook for a clear, reproducible workflow:
+- Prepare and document a small, legally usable training corpus.
+- Split it into training and validation sets without leakage.
+- Train a tokenizer on the training corpus.
+- Implement a compact decoder-only Transformer in PyTorch with randomly initialized weights.
+- Train it with next-token prediction; save checkpoints, configuration, tokenizer, and loss history.
+- If resources permit, add a separate instruction-tuning stage using openly licensed conversation examples.
+- Evaluate validation loss and perplexity, and show honest sample outputs. Clearly label weak or unreliable capabilities.
+
+Connect the exported model to a minimal Streamlit chat app. Keep conversation and model inference local to the app host. Add real web search as an optional separate tool using an established package; show source links and pass retrieved text to the model. Never claim generated code is exact or verified. Do not execute generated code.
+
+Keep the code minimal, readable, and modular. Use only real, necessary dependencies. Do not use Ollama or a hosted inference API. Do not put secrets or large model files in GitHub. Document how to train the model, run the app, and deploy it, including hardware and hosting limits. Handle missing checkpoints, invalid data, interrupted training, and model-loading failures with clear error messages.
+
+First present the hardware-based training plan and expected limitations. Then implement the notebook and app integration in small, reviewable steps. Do not delete existing project files or publish model artifacts without explicit approval.

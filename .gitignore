@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+artifacts/
+data/raw/
+data/processed/
+.ipynb_checkpoints/
+.streamlit/secrets.toml

@@ -1,0 +1,24 @@
+{"user":"What does a tokenizer do?","assistant":"A tokenizer splits text into smaller pieces called tokens and maps them to numbers a language model can process."}
+{"user":"What is next-token training?","assistant":"The model reads a sequence and learns to predict the next token. Repeating this updates its weights."}
+{"user":"What is a validation set for?","assistant":"It is held-out data used to estimate how well training generalizes. It should not be used to update model weights."}
+{"user":"What does perplexity measure?","assistant":"Perplexity is the exponential of average next-token loss. Lower values mean the model predicted the evaluation text better, but do not prove factual ability."}
+{"user":"Why train a tokenizer only on training text?","assistant":"Fitting it on validation text would let information from the held-out set influence preprocessing. Keeping it training-only makes evaluation cleaner."}
+{"user":"Can this small model answer every question correctly?","assistant":"No. It is a small educational model trained on a narrow text corpus. Its answers can be irrelevant or wrong."}
+{"user":"What is a causal mask?","assistant":"A causal mask prevents each position from attending to later tokens, so next-token prediction cannot see the answer in advance."}
+{"user":"Why save checkpoints?","assistant":"Checkpoints preserve model and optimizer state during training. They allow training to resume after an interruption."}
+{"user":"What is an epoch?","assistant":"An epoch is one pass through the training examples. With randomly sampled text windows, it is an approximate measure of data exposure."}
+{"user":"Should I trust generated code?","assistant":"No. Generated code may contain errors or unsafe behavior. Review it carefully and test it in a safe environment; this app never runs generated code."}
+{"user":"What does temperature change?","assistant":"Temperature changes how sharply the model samples from its next-token probabilities. Higher values usually add variation and can add more errors."}
+{"user":"What is a decoder-only Transformer?","assistant":"It is a Transformer that uses causal self-attention to process previous tokens and predict the next token."}
+{"user":"Does web search make this model reliable?","assistant":"Search can provide recent text and source links, but the model may still misread or misstate that text. Check the linked sources directly."}
+{"user":"What should I do if validation loss rises?","assistant":"That can indicate overfitting or noisy evaluation. Compare the saved training and validation losses and consider stopping or reducing training steps."}
+{"user":"Why keep a small context window?","assistant":"A small context window reduces compute and memory needs, but the model can only use a short recent portion of the conversation."}
+{"user":"Does the chat history go to a hosted model?","assistant":"No. This project runs model inference on the app host. If you enable web search, the search query is sent to the selected public search service."}
+{"user":"How do I start the app?","assistant":"Train and export the model from the notebook first, then run Streamlit from the project folder. The README has the commands."}
+{"user":"What if the checkpoint is missing?","assistant":"Run the notebook training and export cells first. The app needs the saved model weights, configuration, and tokenizer."}
+{"user":"What is random initialization?","assistant":"It means the model starts with newly sampled parameter values instead of weights copied from a pretrained language model."}
+{"user":"Can I publish the checkpoint?","assistant":"Check the training-data terms and hosting requirements first. Model files are kept out of Git by default in this project."}
+{"user":"What does local inference mean?","assistant":"The app host loads the checkpoint and computes model outputs on that machine. The chat history is kept in the app session."}
+{"user":"Why can Shakespeare text not teach modern facts?","assistant":"The corpus is historical literature, so it does not provide broad or current factual knowledge. The model may imitate its style without understanding the subject."}
+{"user":"What is an instruction-tuning stage?","assistant":"It continues training a base model on conversation-shaped examples. This small optional stage teaches a format, not dependable general assistance."}
+{"user":"What does the web search option do?","assistant":"It retrieves a few search-result snippets, shows their links, and adds the snippets to the local model prompt for that turn."}
