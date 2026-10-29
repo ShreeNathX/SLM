@@ -2,3 +2,4 @@ torch>=2.2,<3
 tokenizers>=0.20,<1
 streamlit>=1.40
 jupyterlab>=4
+h5py>=3.11,<3.15
