@@ -71,13 +71,18 @@ class TinyDecoder(nn.Module):
 
 @torch.inference_mode()
 def generate(model, tokenizer, prompt: str, end_token_id: int, max_new_tokens=80,
-             temperature=0.9, top_k=40) -> str:
+             temperature=0.9, top_k=40, stop_token_ids=None) -> str:
     model.eval()
     encoded = tokenizer.encode(prompt).ids
-    prompt_limit = max(1, model.context - max_new_tokens)
-    encoded = encoded[-prompt_limit:] or [end_token_id]
+    # Keep as much of the prompt as the context allows. Generation already
+    # rolls over the context window, so reserving room for all new tokens here
+    # needlessly discarded most of a user's prompt.
+    encoded = encoded[-model.context:] or [end_token_id]
     tokens = torch.tensor([encoded], dtype=torch.long, device=next(model.parameters()).device)
     prompt_length = tokens.size(1)
+    stop_ids = {end_token_id}
+    if stop_token_ids:
+        stop_ids.update(int(token_id) for token_id in stop_token_ids)
 
     for _ in range(max_new_tokens):
         logits, _ = model(tokens[:, -model.context:])
@@ -86,7 +91,7 @@ def generate(model, tokenizer, prompt: str, end_token_id: int, max_new_tokens=80
             cutoff = torch.topk(logits, min(top_k, logits.size(-1))).values[:, -1, None]
             logits = logits.masked_fill(logits < cutoff, float("-inf"))
         next_token = torch.multinomial(torch.softmax(logits, dim=-1), num_samples=1)
-        if next_token.item() == end_token_id:
+        if next_token.item() in stop_ids:
             break
         tokens = torch.cat((tokens, next_token), dim=1)
 
