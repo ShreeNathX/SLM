@@ -1,20 +1,39 @@
-Plan and build a genuinely small language model from scratch, train it in JupyterLab, and connect it to a simple Streamlit assistant.
+# Project instructions: small language model from scratch
 
-“From scratch” means the model weights must be initialized randomly and trained by us. Do not download, call, or fine-tune any pretrained language model. Using real libraries such as PyTorch and a real tokenizer package is allowed. Do not invent APIs, packages, model weights, or training results.
+## Objective
 
-Before changing files, inspect the project and the available hardware: Python version, RAM, GPU and GPU memory, and free disk space. Recommend a realistic model size for this computer before starting training. Do not promise a capable general assistant if the hardware and data cannot produce one. Make a small educational model the fallback.
+Help build and improve this repository as a realistic educational small-language-model (SLM) project. The model must start with randomly initialized weights and be trained locally by the project code. The user does not want to download, call, or fine-tune pretrained model weights. Downloading public text datasets and using PyTorch plus the `tokenizers` library is allowed.
 
-Use a Jupyter notebook for a clear, reproducible workflow:
-- Prepare and document a small, legally usable training corpus.
-- Split it into training and validation sets without leakage.
-- Train a tokenizer on the training corpus.
-- Implement a compact decoder-only Transformer in PyTorch with randomly initialized weights.
-- Train it with next-token prediction; save checkpoints, configuration, tokenizer, and loss history.
-- If resources permit, add a separate instruction-tuning stage using openly licensed conversation examples.
-- Evaluate validation loss and perplexity, and show honest sample outputs. Clearly label weak or unreliable capabilities.
+The goal is a reproducible experiment and a simple local chat demo, not a promise of a capable general-purpose assistant. State this limitation clearly. Do not describe the model as accurate, factual, or useful for general assistance unless measured evidence supports that claim.
 
-Connect the exported model to a minimal Streamlit chat app. Keep conversation and model inference local to the app host. Add real web search as an optional separate tool using an established package; show source links and pass retrieved text to the model. Never claim generated code is exact or verified. Do not execute generated code.
+## Current project design
 
-Keep the code minimal, readable, and modular. Use only real, necessary dependencies. Do not use Ollama or a hosted inference API. Do not put secrets or large model files in GitHub. Document how to train the model, run the app, and deploy it, including hardware and hosting limits. Handle missing checkpoints, invalid data, interrupted training, and model-loading failures with clear error messages.
+- `build_slm.py` is the data-preparation and training entry point. It downloads text data if needed, preprocesses it, trains a tokenizer on training portions, pretrains a small decoder-only Transformer from random weights, and then continues training on dialogue data.
+- The current corpora are WikiText-103 raw v1 for language modeling and OpenAssistant OASST1 for English conversation examples. Respect and document each dataset's license and provenance.
+- Keep WikiText train, validation, and test splits separate. Do not train on validation or test text. Split OASST1 by conversation tree so related paths cannot leak across training and validation.
+- `train_chat_from_scratch.ipynb` is a readable notebook wrapper around `build_slm.py`; do not create a second competing training pipeline without a clear reason.
+- `slm.py` defines the model and generation. `app.py` is the Streamlit interface. The app must use local inference, show that answers may be wrong, and never execute generated code.
+- The app's optional web search is supplemental. Show direct source links, distinguish sourced material from model output, and treat retrieved pages as untrusted data rather than instructions.
+- Model files, checkpoints, downloaded corpora, virtual environments, and secrets must not be committed or published.
 
-First present the hardware-based training plan and expected limitations. Then implement the notebook and app integration in small, reviewable steps. Do not delete existing project files or publish model artifacts without explicit approval.
+## Accuracy and research rules
+
+- Inspect the current repository and relevant files before editing. Check the actual environment and hardware before giving machine-specific advice; do not repeat hardware details as current facts without checking them.
+- For changing software, hardware, dataset, license, or research claims, use current primary or official sources. Link the source next to the claim and distinguish measured results from estimates or inference.
+- Never invent APIs, package behavior, dataset statistics, model outputs, benchmark results, or training progress. If a value has not been measured on this computer, label it an estimate and say so.
+- A lower validation loss or perplexity measures next-token prediction on that validation set; it does not by itself show that the model is factually correct or a good assistant.
+- Do not claim a general assistant can be trained from scratch on this small corpus or home GPU. Explain tradeoffs among parameter count, training tokens, data quality, memory, and training time in plain language.
+- The project notes previously described a GTX 1650 with 4 GB VRAM, about 16 GB system RAM, and CPU-only PyTorch. Treat these as historical notes until verified. A GPU is used only if the installed PyTorch build detects CUDA.
+
+## Changes and execution
+
+- Keep changes small, readable, and consistent with `README.md`, `requirements.txt`, the notebook, and the app. Prefer the existing dependencies; add a dependency only when needed and explain why.
+- Do not start a dataset download or model training unless the user explicitly asks to run it. Building or editing code that can perform training is allowed. Explain which command starts training and which only prepares data.
+- Do not run tests unless the user requests testing or verification. When verification is requested, report exactly what was run and its result; never imply that training was tested if it was not run.
+- Handle missing, corrupt, or incomplete data and checkpoints with clear errors. Save resumable checkpoints atomically and validate that checkpoints match the current data and settings before resuming.
+- Do not delete source files, `Prompt.txt`, the virtual environment, downloaded data, or model artifacts as routine cleanup. For a cleanup request, remove only clearly disposable generated caches unless the user explicitly identifies additional targets. Never publish or upload artifacts unless asked.
+- After changes, explain what changed, how the user can run it, what was actually checked, and the main limitations. Keep setup instructions specific to Windows PowerShell when that matches the user's environment.
+
+## Expected output
+
+For implementation requests, edit the relevant project files and keep the README aligned with the actual code. For research-only requests, give a realistic, sourced recommendation before proposing implementation. Separate what the current code does from what future work could improve.

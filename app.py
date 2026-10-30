@@ -13,7 +13,14 @@ from slm import TinyDecoder, generate
 
 ROOT = Path(__file__).resolve().parent
 ARTIFACTS = ROOT / "artifacts"
-CHAT_ARTIFACTS = ARTIFACTS / "chat"
+CHAT_ARTIFACT_CANDIDATES = (ARTIFACTS / "scratch_chat", ARTIFACTS / "chat")
+CHAT_ARTIFACTS = next(
+    (
+        folder for folder in CHAT_ARTIFACT_CANDIDATES
+        if all((folder / name).is_file() for name in ("model.pt", "config.json", "tokenizer.json"))
+    ),
+    CHAT_ARTIFACT_CANDIDATES[0],
+)
 
 st.set_page_config(page_title="Local Chat Model", page_icon="💬")
 st.title("Local Chat Model")
